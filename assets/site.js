@@ -6,7 +6,13 @@ if(loaderSeen){finishLoading()}else{const revealPage=()=>window.setTimeout(finis
 loader?.addEventListener('click',finishLoading);
 document.addEventListener('keydown',event=>{if(event.key==='Escape')finishLoading()});
 
-const menu=document.querySelector('.menu');const nav=document.querySelector('.nav');menu.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',open)});nav.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false')}));
+const menu=document.querySelector('.menu');
+const nav=document.querySelector('.nav');
+const closeMenu=()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false')};
+menu.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',open)});
+nav.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',closeMenu));
+document.addEventListener('click',event=>{if(nav.classList.contains('open')&&!nav.contains(event.target))closeMenu()});
+document.addEventListener('keydown',event=>{if(event.key==='Escape')closeMenu()});
 
 let navFrame;const updateNav=()=>{window.cancelAnimationFrame(navFrame);navFrame=window.requestAnimationFrame(()=>nav.classList.toggle('scrolled',window.scrollY>28))};updateNav();window.addEventListener('scroll',updateNav,{passive:true});
 
